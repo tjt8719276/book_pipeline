@@ -1,0 +1,7 @@
+  使用方式：
+
+  1. 安装 Skill — 在 Claude Code 中运行 /install-skill
+  d:\desk\book_pipeline\BOOK_PIPELINE.md，之后说"处理XX章转录稿"即自动触发完整流程。
+  2. Python 脚本单独使用（clean_chapters 已写好时）：
+  python d:/desk/book_pipeline/merge_and_build.py "源目录" "章节标题" "输出文件名" "输出目录"
+  2. 自动完成 merge → DOCX → PDF → 复制 MD 四步。
