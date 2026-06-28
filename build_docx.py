@@ -88,7 +88,7 @@ def setup_styles(doc):
     normal.font.color.rgb = BLACK
     normal.element.rPr.rFonts.set(qn("w:eastAsia"), FONT_BODY)
     normal.paragraph_format.space_after = Pt(6)
-    normal.paragraph_format.line_spacing = 1.5
+    normal.paragraph_format.line_spacing = 1.0
 
     heading1 = doc.styles["Heading 1"]
     heading1.font.name = FONT_BODY
@@ -117,15 +117,36 @@ def add_cover_page(doc, volume_title):
     configure_section(section)
     section.different_first_page_header_footer = True
 
-    for _ in range(5):
+    # Split title by ：or —— into main title + subtitle
+    delimiter = None
+    for d in ("：", "——"):
+        if d in volume_title:
+            delimiter = d
+            break
+    if delimiter:
+        parts = volume_title.split(delimiter, 1)
+        main_title = parts[0].strip()
+        subtitle = parts[1].strip() if len(parts) > 1 else ""
+    else:
+        main_title = volume_title
+        subtitle = ""
+
+    for _ in range(4):
         doc.add_paragraph()
 
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.space_before = Pt(100)
-    p.paragraph_format.space_after = Pt(24)
-    run = p.add_run(volume_title)
+    p.paragraph_format.space_before = Pt(80)
+    p.paragraph_format.space_after = Pt(18)
+    run = p.add_run(main_title)
     set_run_font(run, FONT_BODY, FONT_SIZE_TITLE, bold=True)
+
+    if subtitle:
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_after = Pt(12)
+        run = p.add_run(subtitle)
+        set_run_font(run, FONT_BODY, FONT_SIZE_SUBTITLE, color=BLUE_DARK, bold=True)
 
 
 def add_toc_section(doc):
@@ -143,7 +164,7 @@ def add_toc_section(doc):
     p.add_run("目录")
 
     toc_paragraph = doc.add_paragraph()
-    toc_paragraph.paragraph_format.line_spacing = 1.5
+    toc_paragraph.paragraph_format.line_spacing = 1.0
     add_toc(toc_paragraph)
 
     doc.add_page_break()
@@ -152,7 +173,7 @@ def add_toc_section(doc):
 def add_heading(doc, text, level):
     style_name = f"Heading {level}"
     p = doc.add_paragraph(style=style_name)
-    p.paragraph_format.line_spacing = 1.5
+    p.paragraph_format.line_spacing = 1.0
     if level == 1:
         p.paragraph_format.space_before = Pt(20)
         p.paragraph_format.space_after = Pt(8)
@@ -169,7 +190,7 @@ def add_body(doc, text):
     if not text.strip():
         return
     p = doc.add_paragraph()
-    p.paragraph_format.line_spacing = 1.5
+    p.paragraph_format.line_spacing = 1.0
     p.paragraph_format.space_after = Pt(6)
     parts = re.split(r"(\*\*.*?\*\*)", text)
     for part in parts:
@@ -197,7 +218,7 @@ def add_code_block(doc, text):
 
 def add_translation(doc, text):
     p = doc.add_paragraph()
-    p.paragraph_format.line_spacing = 1.5
+    p.paragraph_format.line_spacing = 1.0
     p.paragraph_format.space_after = Pt(6)
     p.paragraph_format.left_indent = Cm(0.5)
     label = p.add_run("中文译文：")
@@ -220,7 +241,7 @@ def add_separator(doc):
 
 def add_list_item(doc, text):
     p = doc.add_paragraph()
-    p.paragraph_format.line_spacing = 1.5
+    p.paragraph_format.line_spacing = 1.0
     p.paragraph_format.space_after = Pt(3)
     p.paragraph_format.left_indent = Cm(1.0)
     p.paragraph_format.first_line_indent = Cm(-0.5)
