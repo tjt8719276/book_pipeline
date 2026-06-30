@@ -25,7 +25,7 @@ BLACK = RGBColor(0x00, 0x00, 0x00)
 GRAY_BG = "F2F2F2"
 
 FONT_BODY = "Microsoft YaHei"
-FONT_CODE = "Consolas"
+FONT_CODE = "Microsoft YaHei"
 FONT_SIZE_TITLE = Pt(22)
 FONT_SIZE_SUBTITLE = Pt(14)
 FONT_SIZE_H1 = Pt(14)
@@ -161,7 +161,8 @@ def add_toc_section(doc):
     p.style = doc.styles["Heading 1"]
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(12)
-    p.add_run("目录")
+    run = p.add_run("目录")
+    set_run_font(run, FONT_BODY, FONT_SIZE_H1, color=BLUE_DARK, bold=True)
 
     toc_paragraph = doc.add_paragraph()
     toc_paragraph.paragraph_format.line_spacing = 1.0
@@ -183,7 +184,13 @@ def add_heading(doc, text, level):
     else:
         p.paragraph_format.space_before = Pt(10)
         p.paragraph_format.space_after = Pt(4)
-    p.add_run(text)
+    run = p.add_run(text)
+    if level == 1:
+        set_run_font(run, FONT_BODY, FONT_SIZE_H1, color=BLUE_DARK, bold=True)
+    elif level == 2:
+        set_run_font(run, FONT_BODY, FONT_SIZE_H2, color=BLUE_MID, bold=True)
+    else:
+        set_run_font(run, FONT_BODY, FONT_SIZE_H3, bold=True)
 
 
 def add_body(doc, text):

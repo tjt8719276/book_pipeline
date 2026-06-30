@@ -36,9 +36,9 @@ def merge_chapters(source_dir, volume_title):
     merged_dir.mkdir(parents=True, exist_ok=True)
     merged_path = merged_dir / "merged_chapter.md"
 
-    md_files = sorted(clean_dir.glob("0*.md"))
+    md_files = sorted(clean_dir.glob("[01][0-9]_*.md"))
     if not md_files:
-        raise FileNotFoundError(f"No 0*.md files found in {clean_dir}")
+        raise FileNotFoundError(f"No chapter files found in {clean_dir}")
 
     print(f"[1/5] Merging {len(md_files)} chapter files...")
     with merged_path.open("w", encoding="utf-8") as out:
